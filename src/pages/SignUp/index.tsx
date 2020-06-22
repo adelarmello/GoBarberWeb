@@ -16,7 +16,7 @@ import { Container, Content, Background } from './styles'
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const handleSubmit = useCallback(async (data: object) => {// async function
+  const handleSubmit = useCallback(async (data: object) => {
     try {
       formRef.current?.setErrors({});
 
