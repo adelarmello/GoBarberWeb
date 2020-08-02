@@ -1,9 +1,9 @@
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 import { animated } from 'react-spring';
 
 interface ContainerProps {
   type?: 'success' | 'error' | 'info';
-  hasDescription: boolean;
+  hasDescription: number;
 }
 
 const toastTypeVariations = {
@@ -39,8 +39,6 @@ export const Container = styled(animated.div)<ContainerProps>`
   /*Padrão é info */
   ${(props) => toastTypeVariations[props.type || 'info']}
 
-
-
   > svg {
     margin: 4px 12px 0 0;
   }
@@ -64,15 +62,15 @@ export const Container = styled(animated.div)<ContainerProps>`
     border: 0;
     background: transparent;
     color: inherit;
-
   }
   /*Se o Toast não tem descrição, somento o título...*/
-  ${props => !props.hasDescription && css`
-    align-items: center;
+  ${(props) =>
+    !props.hasDescription &&
+    css`
+      align-items: center;
 
-    svg {
-      margin-top: 0;
-    }
-  `}
-
+      svg {
+        margin-top: 0;
+      }
+    `}
 `;
