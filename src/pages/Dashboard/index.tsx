@@ -1,31 +1,7 @@
 import React from 'react';
-import { FiArrowLeft } from 'react-icons/fi';
-import logoImg from '../../assets/logo.svg';
-import { Link } from 'react-router-dom';
 
-import {
-  Container,
-  Content,
-  AnimationContainer,
-  Background,
-} from '../ForgotPassword/styles';
+// import { Container } from './styles';
 
-const Dashboard: React.FC = () => {
-  return (
-    <Container>
-      <Content>
-        <AnimationContainer>
-          <img src={logoImg} alt="GoBarber" />
-
-          <Link to="/">
-            <FiArrowLeft />
-            Voltar para o início
-          </Link>
-        </AnimationContainer>
-      </Content>
-      <Background />
-    </Container>
-  );
-};
+const Dashboard: React.FC = () => <h1>Dasboard</h1>;
 
 export default Dashboard;
