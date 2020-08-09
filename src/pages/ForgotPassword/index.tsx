@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { FiLogIn, FiMail } from 'react-icons/fi';
+import { FiMail, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import logoImg from '../../assets/logo.svg';
@@ -49,7 +49,7 @@ const ForgotPassword: React.FC = () => {
 
         addToast({
           type: 'success',
-          title: 'E-mail de recuperação enviado',
+          title: 'E-mail de recuperação enviado!',
           description:
             'Enviamos um e-mail para recuperação de senha,verifique sua caixa de entrada',
         });
@@ -94,9 +94,9 @@ const ForgotPassword: React.FC = () => {
             </Button>
           </Form>
 
-          <Link to="/signin">
-            <FiLogIn />
-            Voltar ao login
+          <Link to="/">
+            <FiArrowLeft />
+            Voltar ao início
           </Link>
         </AnimationContainer>
       </Content>
