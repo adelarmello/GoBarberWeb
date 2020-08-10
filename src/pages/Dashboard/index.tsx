@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
   const { signOut, user } = useAuth();
 
   const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
-    if (modifiers.available) {
+    if (modifiers.available && !modifiers.disabled) {
       setSelectedDate(day);
     }
   }, []);
@@ -97,18 +97,22 @@ const Dashboard: React.FC = () => {
       });
   }, [selectedDate]);
 
-  const disabledDays = useMemo(() => {
-    const dates = monthAvailability
-      .filter((monthDay) => monthDay.available === false)
-      .map((monthDay) => {
-        const year = currentMonth.getFullYear();
-        const month = currentMonth.getMonth();
+  // filtra os dias que retornam false, ou seja, os dias que nao tem mais vagas.
+  //  E altera o formato desses dias no calendário.
+  // Deixa desabilitado pro prestador ver os agendamentos do dia que estiver cheio.
 
-        return new Date(year, month, monthDay.day);
-      });
+  // const disabledDays = useMemo(() => {
+  //   const dates = monthAvailability
+  //     .filter((monthDay) => monthDay.available === false)
+  //     .map((monthDay) => {
+  //       const year = currentMonth.getFullYear();
+  //       const month = currentMonth.getMonth();
 
-    return dates;
-  }, [currentMonth, monthAvailability]);
+  //       return new Date(year, month, monthDay.day);
+  //     });
+
+  //   return dates;
+  // }, [currentMonth, monthAvailability]);
 
   const selectedDateAsText = useMemo(() => {
     return format(selectedDate, "'Dia' dd 'de' MMMM", {
@@ -132,6 +136,13 @@ const Dashboard: React.FC = () => {
     return appointments.filter((appointment) => {
       return parseISO(appointment.date).getHours() >= 12;
     });
+  }, [appointments]);
+
+  //    Pega o 1º agendamneto depois do horário atual
+  const nextAppointment = useMemo(() => {
+    return appointments.find((appointment) =>
+      isAfter(parseISO(appointment.date), new Date()),
+    );
   }, [appointments]);
 
   return (
@@ -162,23 +173,30 @@ const Dashboard: React.FC = () => {
             <span>{selectedDateAsText}</span>
             <span>{selectedWeekDay}</span>
           </p>
-          <NextAppointment>
-            <strong>Atendimento a seguir</strong>
-            <div>
-              <img
-                src="https://avatars1.githubusercontent.com/u/30738742?s=460&u=dedc3f9ccc4718145fe4567e668042473e95146b&v=4"
-                alt="Adelar "
-              />
-              <strong>Adelar </strong>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-            </div>
-          </NextAppointment>
+
+          {isToday(selectedDate) && nextAppointment && (
+            <NextAppointment>
+              <strong>Agendamento a seguir</strong>
+              <div>
+                <img
+                  src={nextAppointment.user.avatar_url}
+                  alt={nextAppointment.user.name}
+                />
+                <strong>{nextAppointment.user.name} </strong>
+                <span>
+                  <FiClock />
+                  {nextAppointment.hourFormatted}
+                </span>
+              </div>
+            </NextAppointment>
+          )}
 
           <Section>
             <strong>Manhã</strong>
+
+            {morningAppointments.length === 0 && (
+              <p>Nenhum agendamento neste período</p>
+            )}
 
             {morningAppointments.map((appointment) => (
               <Appointment key={appointment.id}>
@@ -201,6 +219,9 @@ const Dashboard: React.FC = () => {
 
           <Section>
             <strong>Tarde</strong>
+            {afternoonAppointments.length === 0 && (
+              <p>Nenhum agendamento neste período</p>
+            )}
 
             {afternoonAppointments.map((appointment) => (
               <Appointment key={appointment.id}>
@@ -225,9 +246,10 @@ const Dashboard: React.FC = () => {
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
             fromMonth={new Date()}
-            disabledDays={[{ daysOfWeek: [0, 1] }, ...disabledDays]} // Desabilita domingo e segunda
+            // disabledDays={[{ daysOfWeek: [0] }, ...disabledDays]} //
+            disabledDays={[{ daysOfWeek: [0] }]} // Desabilita domingo pra selecionar no calendário.
             modifiers={{
-              available: { daysOfWeek: [2, 3, 4, 5, 6] }, //Dias da semana habilitados no calendário
+              available: { daysOfWeek: [1, 2, 3, 4, 5, 6] }, //Dias da semana habilitados no calendário
             }}
             onMonthChange={handleMonthChange}
             selectedDays={selectedDate}
