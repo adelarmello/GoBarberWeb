@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiPower, FiClock } from 'react-icons/fi';
 
 import {
@@ -10,13 +10,18 @@ import {
   Schedule,
   NextAppointment,
   Calendar,
+  Appointment,
+  Section,
 } from './styles';
 
 import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/auth';
 
 const Dashboard: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const { signOut, user } = useAuth();
+
   return (
     <Container>
       <Header>
@@ -59,6 +64,76 @@ const Dashboard: React.FC = () => {
               </span>
             </div>
           </NextAppointment>
+
+          <Section>
+            <strong>Manhã</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                09:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars1.githubusercontent.com/u/30738742?s=460&u=dedc3f9ccc4718145fe4567e668042473e95146b&v=4"
+                  alt={user.name}
+                />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+            <Appointment>
+              <span>
+                <FiClock />
+                10:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars1.githubusercontent.com/u/30738742?s=460&u=dedc3f9ccc4718145fe4567e668042473e95146b&v=4"
+                  alt={user.name}
+                />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                13:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars1.githubusercontent.com/u/30738742?s=460&u=dedc3f9ccc4718145fe4567e668042473e95146b&v=4"
+                  alt={user.name}
+                />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                14:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars1.githubusercontent.com/u/30738742?s=460&u=dedc3f9ccc4718145fe4567e668042473e95146b&v=4"
+                  alt={user.name}
+                />
+
+                <strong>{user.name}</strong>
+              </div>
+            </Appointment>
+          </Section>
         </Schedule>
         <Calendar />
       </Content>
